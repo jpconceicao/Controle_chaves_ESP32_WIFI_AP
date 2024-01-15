@@ -48,7 +48,10 @@ int definir_endereco_inicial(int numero_carro);
 /* Variáveis e funções referentes ao servo motor */
 Servo myservo; // create servo object to control a servo
 
-int servoPin = 26; // GPIO pin used to connect the servo control (digital out)
+int servoPin1 = 26; // GPIO pin used to connect the servo control (digital out)
+int servoPin2 = 25; // GPIO pin used to connect the servo control (digital out)
+int servoPin3 = 33; // GPIO pin used to connect the servo control (digital out)
+int servoPin4 = 32; // GPIO pin used to connect the servo control (digital out)
 
 int ADC_Max = 4096; // This is the default ADC max value on the ESP32 (12 bit ADC width);
                     // this width can be set (in low-level oode) from 9-12 bits, for a
@@ -56,11 +59,18 @@ int ADC_Max = 4096; // This is the default ADC max value on the ESP32 (12 bit AD
 
 int val; // variable to read the value from the analog pin
 
+void liberar_chave(int carro);
 /* ----------------------------------------------*/
 
 
 void setup() {
   Serial.begin(115200);
+  // Teste de saída de servo motor
+  pinMode(servoPin1, OUTPUT);
+  pinMode(servoPin2, OUTPUT);
+  pinMode(servoPin3, OUTPUT);
+  pinMode(servoPin4, OUTPUT);
+  //------------------------------
 
   // Inicializa o Access Point
   WiFi.softAP(apSSID, apPassword);
@@ -87,6 +97,7 @@ void setup() {
       if(password.equals(senha_salva))
       {
         // Entra a função que irá girar o motor específico do carro selecionado
+        liberar_chave(carro);
         request->send(200, "text/plain", "Senha correta! Acesso permitido.");
       } 
       else 
@@ -103,8 +114,14 @@ void setup() {
   });
 
   // Página de alteração de senhas do admin
-  server.on("/admin/Key", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/admin/Key_admin", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/html", "<html><body><form action='/admin/salvar_senha' method='POST'><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password' maxlength='9' required><input type='submit' value='Salvar'></form></body></html>");
+  });
+
+  server.on("/admin/Key_admin_reset", HTTP_GET, [](AsyncWebServerRequest *request){
+    resetar_EEPROM();
+    Serial.println("Resetadas as senhas da ESP32 via comando web");
+    request->send(200, "text/html", "<html><body><p>Realizado o RESET nas senhas da ESP32</p></body></html>");
   });
 
   // Envio de formulário para alteração de senhas
@@ -369,4 +386,43 @@ int definir_endereco_inicial(int numero_carro)
   return endereco_inicial;
 }
 
+void liberar_chave(int carro)
+{
+  Serial.print("Carro: ");
+  Serial.println(carro);
 
+  switch (carro)
+  {
+  case 1:
+    Serial.println("Entro no case de liberar carro 1");
+    digitalWrite(servoPin1, HIGH);
+    delay(2000);
+    digitalWrite(servoPin1, LOW);
+    break;
+  
+  case 2:
+    Serial.println("Entro no case de liberar carro 2");
+    digitalWrite(servoPin2, HIGH);
+    delay(2000);
+    digitalWrite(servoPin2, LOW);
+    break;
+  
+  case 3:
+    Serial.println("Entro no case de liberar carro 3");
+    digitalWrite(servoPin3, HIGH);
+    delay(2000);
+    digitalWrite(servoPin3, LOW);
+    break;
+  
+  case 4:
+    Serial.println("Entro no case de liberar carro 4");
+    digitalWrite(servoPin4, HIGH);
+    delay(2000);
+    digitalWrite(servoPin4, LOW);
+    break;
+  
+  default:
+    Serial.println("Valor de carro inválido");
+    break;
+  }
+}
