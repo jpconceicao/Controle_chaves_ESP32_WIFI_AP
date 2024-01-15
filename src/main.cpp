@@ -80,7 +80,7 @@ void setup() {
 
   // Configuração do servidor web
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", "<html><body><form action='/check' method='POST'><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Senha</label><input type='password' name='password'><input type='submit' value='Liberar'></form></body></html>");
+    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}</style></head><body><form action='/check' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Senha</label><input type='password' name='password'><input type='submit' value='Liberar'></form></body></html>");
   });
   
   // Envio de formulário para checagem de senha do usuário
@@ -98,13 +98,13 @@ void setup() {
       {
         // Entra a função que irá girar o motor específico do carro selecionado
         liberar_chave(carro);
-        request->send(200, "text/plain", "Senha correta! Acesso permitido.");
+        request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha correta! Pegue a chave.</p><br><a href='/'>Voltar ao início</a></div></body></html>");
       } 
       else 
       {
         // Informar que a senha está incorreta e permitir retornar pra página inicial
         // Talvez o formato precise ser text/html
-        request->send(401, "text/plain", "Senha incorreta! Acesso negado.");
+        request->send(401, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Que pena!</h1><p>Senha incorreta! Volte e tente novamente</p><br><a href='/'>Voltar ao início</a></div></body></html>");
       }
     } 
     else 
@@ -115,13 +115,13 @@ void setup() {
 
   // Página de alteração de senhas do admin
   server.on("/admin/Key_admin", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", "<html><body><form action='/admin/salvar_senha' method='POST'><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password' maxlength='9' required><input type='submit' value='Salvar'></form></body></html>");
+    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Admin - Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><form action='/admin/salvar_senha' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password'><input type='submit' value='Liberar'><br><br><a href='/admin/Key_admin_reset'>Resetar Senhas</a><br><br><a href='/'>Voltar para o Início</a></form></body></html>");
   });
 
   server.on("/admin/Key_admin_reset", HTTP_GET, [](AsyncWebServerRequest *request){
     resetar_EEPROM();
     Serial.println("Resetadas as senhas da ESP32 via comando web");
-    request->send(200, "text/html", "<html><body><p>Realizado o RESET nas senhas da ESP32</p></body></html>");
+    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senhas resetadas com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Key_admin'>Voltar ao admin</a></div></body></html>");
   });
 
   // Envio de formulário para alteração de senhas
@@ -136,7 +136,7 @@ void setup() {
       
       salvar_senha_EEPROM(endereco_inicial, carro, password);
 
-      request->send(200, "text/plain", "Senha alterada com sucesso!");
+      request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha salva com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Key_admin'>Voltar ao admin</a></div></body></html>");
     }
   });
 
