@@ -1,0 +1,30 @@
+## -- Telas da aplicação do controle de chaves -- ##
+
+# - Tela inicial (index.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}</style></head><body><form action='/check' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Senha</label><input type='password' name='password'><input type='submit' value='Liberar'></form></body></html>
+
+
+# - Tela do admin (admin.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Admin - Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><form action='/admin/salvar_senha' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password'><input type='submit' value='Salvar'><br><br><a href='/admin/Soeusei1_reset'>Resetar Senhas</a><br><br><a href='/'>Voltar para o Início</a></form></body></html>
+
+
+# - Tela de retorno positivo (senha_correta.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha correta! Pegue a chave.</p><br><a href='/'>Voltar ao início</a></div></body></html>
+
+
+# - Tela de retorno negativo (senha_errada.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Que pena!</h1><p>Senha incorreta! Volte e tente novamente</p><br><a href='/'>Voltar ao início</a></div></body></html>
+
+
+# - Tela de senhas resetadas (senhas_resetadas.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senhas resetadas com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Soeusei1'>Voltar ao admin</a></div></body></html>
+
+
+# - Tela de senha salva (senha_salva.html)
+
+<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha salva com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Soeusei1'>Voltar ao admin</a></div></body></html>

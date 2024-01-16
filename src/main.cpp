@@ -13,7 +13,7 @@
 #define TEMPO_ESPERA 50
 
 /* Define as informações do AP (Access Point) */
-const char *apSSID = "ESP32-AP";
+const char *apSSID = "Carros - AEE";
 const char *apPassword = "123456789";
 const int serverPort = 80;
 
@@ -46,7 +46,10 @@ int definir_endereco_inicial(int numero_carro);
 
 
 /* Variáveis e funções referentes ao servo motor */
-Servo myservo; // create servo object to control a servo
+Servo myservo1; // create servo object to control a servo
+Servo myservo2; // create servo object to control a servo
+Servo myservo3; // create servo object to control a servo
+Servo myservo4; // create servo object to control a servo
 
 int servoPin1 = 26; // GPIO pin used to connect the servo control (digital out)
 int servoPin2 = 25; // GPIO pin used to connect the servo control (digital out)
@@ -65,11 +68,23 @@ void liberar_chave(int carro);
 
 void setup() {
   Serial.begin(115200);
-  // Teste de saída de servo motor
-  pinMode(servoPin1, OUTPUT);
-  pinMode(servoPin2, OUTPUT);
-  pinMode(servoPin3, OUTPUT);
-  pinMode(servoPin4, OUTPUT);
+
+  // Inicilização dos servo motores
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  myservo1.setPeriodHertz(50);    
+
+  myservo1.attach(servoPin1, 500, 2400); 
+  myservo2.attach(servoPin2, 500, 2400); 
+  myservo3.attach(servoPin3, 500, 2400); 
+  myservo4.attach(servoPin4, 500, 2400); 
+
+  myservo1.write(0); // Envia o motor p/ o ângulo ZERO
+  myservo2.write(0); // Envia o motor p/ o ângulo ZERO
+  myservo3.write(0); // Envia o motor p/ o ângulo ZERO
+  myservo4.write(0); // Envia o motor p/ o ângulo ZERO
   //------------------------------
 
   // Inicializa o Access Point
@@ -114,14 +129,15 @@ void setup() {
   });
 
   // Página de alteração de senhas do admin
-  server.on("/admin/Key_admin", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Admin - Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><form action='/admin/salvar_senha' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password'><input type='submit' value='Liberar'><br><br><a href='/admin/Key_admin_reset'>Resetar Senhas</a><br><br><a href='/'>Voltar para o Início</a></form></body></html>");
+  server.on("/admin/Soeusei1", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Admin - Controle de chaves</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}h1 {color: #007bff;}form {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);width: 300px;border: #007bff solid 2px;}label {display: block;margin-bottom: 8px;}select,input {width: 100%;padding: 8px;margin-bottom: 16px;box-sizing: border-box;}input[type='submit'] {background-color: #007bff;color: #fff;cursor: pointer;}input[type='submit']:hover {background-color: #0056b3;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><form action='/admin/salvar_senha' method='POST'><h1>Controle de carros</h1><label for='carros'>Selecione um carro:</label><select id='carros' name='carros'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><label for='password'>Nova Senha</label><input type='password' name='password'><input type='submit' value='Salvar'><br><br><a href='/admin/Soeusei1_reset'>Resetar Senhas</a><br><br><a href='/'>Voltar para o Início</a></form></body></html>");
   });
 
-  server.on("/admin/Key_admin_reset", HTTP_GET, [](AsyncWebServerRequest *request){
+  // Requisição para resetar as senhas do sistema
+  server.on("/admin/Soeusei1_reset", HTTP_GET, [](AsyncWebServerRequest *request){
     resetar_EEPROM();
     Serial.println("Resetadas as senhas da ESP32 via comando web");
-    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senhas resetadas com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Key_admin'>Voltar ao admin</a></div></body></html>");
+    request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senhas resetadas com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Soeusei1'>Voltar ao admin</a></div></body></html>");
   });
 
   // Envio de formulário para alteração de senhas
@@ -136,7 +152,7 @@ void setup() {
       
       salvar_senha_EEPROM(endereco_inicial, carro, password);
 
-      request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha salva com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Key_admin'>Voltar ao admin</a></div></body></html>");
+      request->send(200, "text/html", "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Feedback</title><style>body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}div {background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);text-align: center;border: #007bff solid 2px;}h1 {color: #007bff;}p {margin-bottom: 16px;}a {color: #007bff;text-decoration: none;font-weight: bold;}a:hover {text-decoration: underline;}</style></head><body><div><h1>Parabéns</h1><p>Senha salva com sucesso.</p><br><a href='/'>Voltar ao início</a><br><br><a href='/admin/Soeusei1'>Voltar ao admin</a></div></body></html>");
     }
   });
 
@@ -175,7 +191,7 @@ void loop() {
 void set_senha_master()
 {
   // Converte a string em bytes
-  String data = "#Diabinho";
+  String data = "#Soeusei1";
 
   byte bytes[data.length() + 1];
   data.getBytes(bytes, data.length() + 1);
@@ -395,30 +411,70 @@ void liberar_chave(int carro)
   {
   case 1:
     Serial.println("Entro no case de liberar carro 1");
-    digitalWrite(servoPin1, HIGH);
-    delay(2000);
-    digitalWrite(servoPin1, LOW);
+    for (int pos = 0; pos <= 150; pos += 1)
+    {
+      myservo1.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
+
+    delay(5000);
+
+    for (int pos = 150; pos >= 0; pos -= 1)
+    {                     // goes from 180 degrees to 0 degrees
+      myservo1.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
     break;
   
   case 2:
     Serial.println("Entro no case de liberar carro 2");
-    digitalWrite(servoPin2, HIGH);
-    delay(2000);
-    digitalWrite(servoPin2, LOW);
+    for (int pos = 0; pos <= 150; pos += 1)
+    {
+      myservo2.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
+
+    delay(5000);
+
+    for (int pos = 150; pos >= 0; pos -= 1)
+    {                     // goes from 180 degrees to 0 degrees
+      myservo2.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
     break;
   
   case 3:
     Serial.println("Entro no case de liberar carro 3");
-    digitalWrite(servoPin3, HIGH);
-    delay(2000);
-    digitalWrite(servoPin3, LOW);
+    for (int pos = 0; pos <= 150; pos += 1)
+    {
+      myservo3.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
+
+    delay(5000);
+
+    for (int pos = 150; pos >= 0; pos -= 1)
+    {                     // goes from 180 degrees to 0 degrees
+      myservo3.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
     break;
   
   case 4:
     Serial.println("Entro no case de liberar carro 4");
-    digitalWrite(servoPin4, HIGH);
-    delay(2000);
-    digitalWrite(servoPin4, LOW);
+    for (int pos = 0; pos <= 150; pos += 1)
+    {
+      myservo4.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
+
+    delay(5000);
+
+    for (int pos = 150; pos >= 0; pos -= 1)
+    {                     // goes from 180 degrees to 0 degrees
+      myservo4.write(pos); // tell servo to go to position in variable 'pos'
+      delay(1);           // waits 15ms for the servo to reach the position
+    }
     break;
   
   default:
